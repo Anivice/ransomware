@@ -12,5 +12,6 @@ echo "AES password is $pass"
 for file in $(find $path -type f)
 do
     openssl enc -aes256 -pbkdf2 -md sha-256 -a -salt -k "$pass" -in "$file" -out "${file}.enc"
+    rm $file
 done
 
